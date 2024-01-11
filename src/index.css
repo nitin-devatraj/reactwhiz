@@ -44,8 +44,9 @@ body {
   width: 66rem;
   margin-bottom: 4rem;
   display: flex;
+  gap: 2.5rem;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .error {
