@@ -5,6 +5,7 @@ import Loader from "./components/main/ui/Loader";
 import Error from "./components/main/ui/Error";
 import StartScreen from "./components/main/ui/StartScreen";
 import Question from "./components/main/question/Question";
+import NextButton from "./components/main/ui/NextButton";
 
 const initialState = {
   questions: [],
@@ -46,6 +47,13 @@ function reducerFn(currState, action) {
             : currState.points,
       };
 
+    case "nextQuestion":
+      return {
+        ...currState,
+        index: currState.index + 1,
+        answer: null,
+      };
+
     default:
       throw new Error("unknown action type");
   }
@@ -79,11 +87,14 @@ export default function App() {
           />
         )}
         {status === "active" && (
-          <Question
-            currQuestion={questions[index]}
-            dispatchFn={dispatchFn}
-            answer={answer}
-          />
+          <>
+            <Question
+              currQuestion={questions[index]}
+              dispatchFn={dispatchFn}
+              answer={answer}
+            />
+            <NextButton dispatchFn={dispatchFn} answer={answer} />
+          </>
         )}
       </Main>
     </div>
