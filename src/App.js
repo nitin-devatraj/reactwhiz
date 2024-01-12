@@ -9,6 +9,9 @@ import Question from "./components/main/question/Question";
 const initialState = {
   questions: [],
   status: "loading",
+  index: 0,
+  answer: null,
+  points: 0,
 };
 
 function reducerFn(currState, action) {
@@ -32,13 +35,24 @@ function reducerFn(currState, action) {
         status: "active",
       };
 
+    case "newAnswer":
+      const { correctOption, points } = currState.questions[currState.index];
+      return {
+        ...currState,
+        answer: action.payload,
+        points:
+          action.payload === correctOption
+            ? currState.points + points
+            : currState.points,
+      };
+
     default:
       throw new Error("unknown action type");
   }
 }
 
 export default function App() {
-  const [{ questions, status }, dispatchFn] = useReducer(
+  const [{ questions, status, index, answer }, dispatchFn] = useReducer(
     reducerFn,
     initialState
   );
@@ -64,7 +78,13 @@ export default function App() {
             dispatchFn={dispatchFn}
           />
         )}
-        {status === "active" && <Question />}
+        {status === "active" && (
+          <Question
+            currQuestion={questions[index]}
+            dispatchFn={dispatchFn}
+            answer={answer}
+          />
+        )}
       </Main>
     </div>
   );
