@@ -7,6 +7,7 @@ import StartScreen from "./components/main/ui/StartScreen";
 import Question from "./components/main/question/Question";
 import NextButton from "./components/main/ui/NextButton";
 import Progress from "./components/main/progress/Progress";
+import FinishScreen from "./components/main/ui/FinishScreen";
 
 const initialState = {
   questions: [],
@@ -14,6 +15,7 @@ const initialState = {
   index: 0,
   answer: null,
   points: 0,
+  highscore: 0,
 };
 
 function reducerFn(currState, action) {
@@ -55,16 +57,31 @@ function reducerFn(currState, action) {
         answer: null,
       };
 
+    case "finished":
+      return {
+        ...currState,
+        status: "finished",
+        highscore:
+          currState.points > currState.highscore
+            ? currState.points
+            : currState.highscore,
+      };
+
+    case "restart":
+      return {
+        ...initialState,
+        questions: currState.questions,
+        status: "ready",
+      };
+
     default:
       throw new Error("unknown action type");
   }
 }
 
 export default function App() {
-  const [{ questions, status, index, answer, points }, dispatchFn] = useReducer(
-    reducerFn,
-    initialState
-  );
+  const [{ questions, status, index, answer, points, highscore }, dispatchFn] =
+    useReducer(reducerFn, initialState);
 
   const numOfQuestions = questions.length;
   const maxPossiblePoints = questions.reduce((acc, cur) => acc + cur.points, 0);
@@ -101,8 +118,21 @@ export default function App() {
               dispatchFn={dispatchFn}
               answer={answer}
             />
-            <NextButton dispatchFn={dispatchFn} answer={answer} />
+            <NextButton
+              dispatchFn={dispatchFn}
+              answer={answer}
+              index={index}
+              numOfQuestions={numOfQuestions}
+            />
           </>
+        )}
+        {status === "finished" && (
+          <FinishScreen
+            points={points}
+            maxPossiblePoints={maxPossiblePoints}
+            highscore={highscore}
+            dispatchFn={dispatchFn}
+          />
         )}
       </Main>
     </div>
