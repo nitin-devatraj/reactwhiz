@@ -1,4 +1,8 @@
-export default function StartScreen({ numOfQuestions, dispatchFn }) {
+import useQuizContext from "../../../custom-hooks/useQuizContext";
+
+export default function StartScreen() {
+  const { numOfQuestions, dispatchFn } = useQuizContext();
+
   return (
     <div className="start">
       <h2>Welcome to ReactWhiz</h2>

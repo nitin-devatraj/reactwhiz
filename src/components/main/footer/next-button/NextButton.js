@@ -1,9 +1,8 @@
-export default function NextButton({
-  dispatchFn,
-  answer,
-  index,
-  numOfQuestions,
-}) {
+import useQuizContext from "../../../../custom-hooks/useQuizContext";
+
+export default function NextButton() {
+  const { dispatchFn, answer, index, numOfQuestions } = useQuizContext();
+
   if (answer === null) return;
 
   if (index < numOfQuestions - 1)
